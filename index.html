@@ -14,12 +14,14 @@
             color: #333;
         }
 
+        /* شريط علوي مع الشعار */
         .top-bar {
             background: #ffffff;
             border-bottom: 1px solid #e0e0e0;
             padding: 10px 20px;
             display: flex;
             align-items: center;
+            justify-content: flex-start;
             gap: 15px;
         }
 
@@ -33,6 +35,7 @@
             color: #c8102e;
         }
 
+        /* قسم الترحيب */
         .hero {
             text-align: center;
             padding: 40px 20px 30px;
@@ -69,6 +72,7 @@
             font-size: 14px;
         }
 
+        /* زر البداية */
         .hero button {
             padding: 12px 30px;
             font-size: 16px;
@@ -78,8 +82,21 @@
             background: #c8102e;
             color: #fff;
             box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.2s ease;
         }
 
+        .hero button:hover {
+            background: #a40e26;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.18);
+        }
+
+        .hero button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+        }
+
+        /* حاوية الأداة */
         .container {
             max-width: 1100px;
             margin: 0 auto 40px;
@@ -100,6 +117,7 @@
             width: 100%;
             padding: 8px;
             margin-top: 5px;
+            box-sizing: border-box;
             border-radius: 6px;
             border: 1px solid #ccc;
         }
@@ -113,21 +131,57 @@
             background: #007b83;
             color: #fff;
             font-size: 14px;
+            transition: background 0.2s ease, box-shadow 0.1s ease, transform 0.1s ease;
+        }
+
+        button.calc-btn:hover {
+            background: #005f65;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
+        }
+
+        /* زر الطباعة */
+        .print-btn {
+            margin-top: 15px;
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: 1px solid #555;
+            background: #ffffff;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .print-btn:hover {
+            background: #f1f1f1;
         }
 
         #result {
             margin-top: 20px;
             padding: 10px 12px;
             border-radius: 8px;
+            border: 1px solid #e0e0e0;
             background: #f9fafb;
+            line-height: 1.8;
             font-size: 14px;
+        }
+
+        .section-title {
+            margin-top: 25px;
+        }
+
+        /* الجداول */
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 10px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
-            overflow-x: auto;
+            margin-top: 5px;
+            font-size: 13px;
+            min-width: 600px; /* حتى يظهر شريط تمرير على الجوال */
         }
 
         th, td {
@@ -143,192 +197,308 @@
         .guard-name {
             text-align: right;
             font-weight: bold;
+            white-space: nowrap;
         }
 
-        .section-title {
-            margin-top: 25px;
+        /* إخفاء عناصر عند الطباعة */
+        .no-print {
+            /* عناصر ستختفي في نمط الطباعة */
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 0 8px 20px;
+                padding: 15px;
+            }
+            .hero {
+                padding: 25px 10px 20px;
+            }
+            .hero h1 {
+                font-size: 20px;
+            }
+            table {
+                font-size: 11px;
+                min-width: 500px;
+            }
+            th, td {
+                padding: 3px 4px;
+            }
+        }
+
+        @media print {
+            body {
+                background: #ffffff;
+            }
+            .top-bar,
+            .hero,
+            .calc-btn,
+            .print-btn,
+            #startBtn {
+                display: none !important;
+            }
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+                margin: 0;
+            }
         }
     </style>
 </head>
-
 <body>
 
-<div class="top-bar">
-    <img src="MFS.png" alt="MSF Logo">
+<!-- شريط علوي مع شعار MSF -->
+<div class="top-bar no-print">
+    <!-- يمكنك استبدال الرابط بصورة الشعار الخاصة بك -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Medecins_Sans_Frontieres_logo.svg" alt="MSF Logo">
     <div class="top-bar-title">نظام توزيع الحراس - MSF</div>
 </div>
 
-<div class="hero">
+<!-- قسم الترحيب والزر -->
+<div class="hero no-print">
     <h1>أداة توزيع الحراس على الفترات الصباحية والمسائية</h1>
-    <p>هذه الأداة تساعدك على توزيع الحراس مع احترام الحد الأقصى لساعات العمل.</p>
+    <p>الأداة تساعدك على توزيع الحراس على مدار الشهر مع احترام الحد الأقصى لساعات عمل الحارس.</p>
 
     <div class="hero-instructions">
-        <strong>تعليمات:</strong>
+        <strong>تعليمات سريعة:</strong>
         <ul>
-            <li>أدخل ساعات كل فترة.</li>
-            <li>أدخل عدد الحراس المطلوب لكل فترة.</li>
-            <li>أدخل الحد الأقصى لساعات كل حارس.</li>
+            <li>اختر الشهر المطلوب للتخطيط (عدد الأيام يُحسب تلقائياً).</li>
+            <li>أدخل عدد ساعات الفترة الصباحية والمسائية في اليوم.</li>
+            <li>حدد عدد الحراس المطلوبين في كل فترة لكل يوم.</li>
+            <li>أدخل الحد الأقصى لساعات عمل الحارس في الشهر (مثل 242 ساعة).</li>
+            <li>اضغط على "احسب ووزّع" ليتم إنشاء جدولين: صباحي (D) ومسائي (N).</li>
         </ul>
     </div>
 
     <button id="startBtn">قم بتوزيع الحراس</button>
 </div>
 
+<!-- الأداة (مخفية في البداية) -->
 <div id="calculatorContainer" style="display:none;">
     <div class="container">
         <h2>إعدادات التوزيع</h2>
 
-        <label>الشهر:</label>
+        <label for="month">اختر الشهر:</label>
         <select id="month">
-            <option value="1">يناير (31)</option>
-            <option value="2">فبراير (28)</option>
-            <option value="3">مارس (31)</option>
-            <option value="4">أبريل (30)</option>
-            <option value="5">مايو (31)</option>
-            <option value="6">يونيو (30)</option>
-            <option value="7">يوليو (31)</option>
-            <option value="8">أغسطس (31)</option>
-            <option value="9">سبتمبر (30)</option>
-            <option value="10">أكتوبر (31)</option>
-            <option value="11">نوفمبر (30)</option>
-            <option value="12">ديسمبر (31)</option>
+            <option value="1">يناير (31 يوم)</option>
+            <option value="2">فبراير (28 يوم)</option>
+            <option value="3">مارس (31 يوم)</option>
+            <option value="4">أبريل (30 يوم)</option>
+            <option value="5">مايو (31 يوم)</option>
+            <option value="6">يونيو (30 يوم)</option>
+            <option value="7">يوليو (31 يوم)</option>
+            <option value="8">أغسطس (31 يوم)</option>
+            <option value="9">سبتمبر (30 يوم)</option>
+            <option value="10">أكتوبر (31 يوم)</option>
+            <option value="11">نوفمبر (30 يوم)</option>
+            <option value="12">ديسمبر (31 يوم)</option>
         </select>
 
-        <label>ساعات الفترة الصباحية:</label>
-        <input type="number" id="morningHours">
+        <label for="morningHours">عدد ساعات الدوام الصباحي في اليوم (D):</label>
+        <input type="number" id="morningHours" min="1" placeholder="مثال: 10">
 
-        <label>ساعات الفترة المسائية:</label>
-        <input type="number" id="eveningHours">
+        <label for="eveningHours">عدد ساعات الدوام المسائي في اليوم (N):</label>
+        <input type="number" id="eveningHours" min="1" placeholder="مثال: 14">
 
-        <label>عدد الحراس في الفترة الصباحية:</label>
-        <input type="number" id="morningGuardsPerShift">
+        <label for="morningGuardsPerShift">عدد الحراس في الفترة الصباحية لكل يوم:</label>
+        <input type="number" id="morningGuardsPerShift" min="0" placeholder="مثال: 1">
 
-        <label>عدد الحراس في الفترة المسائية:</label>
-        <input type="number" id="eveningGuardsPerShift">
+        <label for="eveningGuardsPerShift">عدد الحراس في الفترة المسائية لكل يوم:</label>
+        <input type="number" id="eveningGuardsPerShift" min="0" placeholder="مثال: 2">
 
-        <label>الحد الأقصى لساعات دوام الحارس:</label>
-        <input type="number" id="maxHoursPerGuard">
+        <label for="maxHoursPerGuard">الحد الأقصى لساعات دوام الحارس في الشهر:</label>
+        <input type="number" id="maxHoursPerGuard" min="1" placeholder="مثال: 242">
 
-        <button class="calc-btn" onclick="calculateAndRender()">احسب ووزع</button>
+        <button class="calc-btn" onclick="calculateAndRender()">احسب ووزّع</button>
+
+        <!-- زر الطباعة -->
+        <button class="print-btn no-print" onclick="window.print()">🖨 طباعة الجداول</button>
 
         <div id="result"></div>
+
         <div id="morningSection"></div>
         <div id="eveningSection"></div>
     </div>
 </div>
 
 <script>
-
-    /* ===== إصلاح مشكلة scrollIntoView على الجوال ===== */
+    // إظهار الأداة عند الضغط على "قم بتوزيع الحراس"
     document.getElementById('startBtn').addEventListener('click', function () {
         const calc = document.getElementById('calculatorContainer');
         calc.style.display = 'block';
-
-        if (typeof calc.scrollIntoView === "function") {
-            try {
-                calc.scrollIntoView({ behavior: "smooth" });
-            } catch (e) {
-                calc.scrollIntoView();
-            }
-        }
+        calc.scrollIntoView({ behavior: 'smooth' });
     });
 
     function getDaysInMonth(month) {
-        const m = parseInt(month);
-        return [1,3,5,7,8,10,12].includes(m) ? 31 :
-               [4,6,9,11].includes(m) ? 30 : 28;
+        month = parseInt(month);
+        const months31 = [1, 3, 5, 7, 8, 10, 12];
+        const months30 = [4, 6, 9, 11];
+        if (months31.includes(month)) return 31;
+        if (months30.includes(month)) return 30;
+        if (month === 2) return 28; // تجاهل السنة الكبيسة
+        return 30;
     }
 
-    function buildShiftSchedule(days, guardsPerShift, maxHours, shiftHours, code) {
+    function buildShiftSchedule(daysInMonth, guardsPerShift, maxHoursPerGuard, shiftHours, shiftCode) {
         if (guardsPerShift <= 0 || shiftHours <= 0) {
-            return { totalGuards: 0, totalRequiredHours: 0, schedule: [], guardHours: [] };
+            return {
+                totalGuards: 0,
+                totalRequiredHours: 0,
+                schedule: [],
+                guardHours: []
+            };
         }
 
-        const totalRequiredHours = days * guardsPerShift * shiftHours;
-        let totalGuards = 1;
-        let iterations = 0;
+        const totalRequiredHours = daysInMonth * guardsPerShift * shiftHours;
 
-        while (iterations < 200) {
-            let schedule = Array.from({ length: totalGuards }, () =>
-                Array.from({ length: days }, () => "R")
-            );
+        let totalGuards = 1;
+        let schedule = [];
+        let guardHours = [];
+        let iterations = 0;
+        const MAX_ITER = 200;
+
+        while (iterations < MAX_ITER) {
+            schedule = [];
+            for (let g = 0; g < totalGuards; g++) {
+                schedule[g] = [];
+                for (let d = 0; d < daysInMonth; d++) {
+                    schedule[g][d] = "R";
+                }
+            }
 
             let idx = 0;
-            for (let d = 0; d < days; d++) {
+            for (let day = 0; day < daysInMonth; day++) {
                 for (let s = 0; s < guardsPerShift; s++) {
-                    schedule[idx % totalGuards][d] = code;
+                    const guardIndex = idx % totalGuards;
+                    schedule[guardIndex][day] = shiftCode;
                     idx++;
                 }
             }
 
-            let guardHours = schedule.map(row =>
-                row.filter(v => v === code).length * shiftHours
-            );
+            guardHours = [];
+            let maxGuard = 0;
+            for (let g = 0; g < totalGuards; g++) {
+                let sum = 0;
+                for (let d = 0; d < daysInMonth; d++) {
+                    if (schedule[g][d] === shiftCode) sum += shiftHours;
+                }
+                guardHours[g] = sum;
+                if (sum > maxGuard) maxGuard = sum;
+            }
 
-            if (Math.max(...guardHours) <= maxHours) {
-                return { totalGuards, totalRequiredHours, schedule, guardHours };
+            if (maxGuard <= maxHoursPerGuard || !isFinite(maxGuard)) {
+                break;
             }
 
             totalGuards++;
             iterations++;
         }
 
-        return { totalGuards, totalRequiredHours, schedule: [], guardHours: [] };
+        return {
+            totalGuards,
+            totalRequiredHours,
+            schedule,
+            guardHours
+        };
     }
 
-    function renderShiftTable(title, days, data, containerId) {
+    function renderShiftTable(title, daysInMonth, shiftCode, dataObj, containerId) {
         const container = document.getElementById(containerId);
         container.innerHTML = "";
 
-        if (data.totalGuards === 0) {
-            container.innerHTML = `<p>${title}: لا يوجد حراس</p>`;
+        const { totalGuards, totalRequiredHours, schedule, guardHours } = dataObj;
+
+        if (totalGuards === 0) {
+            container.innerHTML = `<p class="section-title"><strong>${title}:</strong> لا يوجد حراس لهذه الفترة.</p>`;
             return;
         }
 
-        let html = `<h3>${title}</h3>`;
-        html += `<p>عدد الحراس: <b>${data.totalGuards}</b> — الساعات المطلوبة: <b>${data.totalRequiredHours}</b></p>`;
-        html += `<table><thead><tr><th>الحارس</th>`;
+        let maxGuard = guardHours.length ? Math.max(...guardHours) : 0;
 
-        for (let d = 1; d <= days; d++) html += `<th>${d}</th>`;
-        html += `<th>المجموع</th></tr></thead><tbody>`;
+        let html = `<h3 class="section-title">${title}</h3>`;
+        html += `<p>🔢 إجمالي الساعات المطلوبة لهذه الفترة في الشهر: <b>${totalRequiredHours}</b> ساعة<br>
+                 👥 عدد الحراس المستخدمين لهذه الفترة: <b>${totalGuards}</b> حارس<br>
+                 (أعلى مجموع ساعات لحارس واحد في هذه الفترة = <b>${maxGuard}</b> ساعة)</p>`;
 
-        data.schedule.forEach((row, i) => {
-            html += `<tr><td class="guard-name">حارس ${i+1}</td>`;
-            row.forEach(day => html += `<td>${day}</td>`);
-            html += `<td><b>${data.guardHours[i]}</b></td></tr>`;
-        });
+        html += '<div class="table-scroll"><table><thead><tr>';
+        html += "<th>الحارس</th>";
+        for (let d = 1; d <= daysInMonth; d++) {
+            html += `<th>${d}</th>`;
+        }
+        html += "<th>مجموع الساعات</th>";
+        html += "</tr></thead><tbody>";
 
-        html += `</tbody></table>`;
+        for (let g = 0; g < totalGuards; g++) {
+            const row = schedule[g] || [];
+            const hours = guardHours[g] || 0;
+
+            html += "<tr>";
+            html += `<td class="guard-name">حارس ${g + 1}</td>`;
+
+            for (let d = 0; d < daysInMonth; d++) {
+                html += `<td>${row[d] || "R"}</td>`;
+            }
+
+            html += `<td><b>${hours}</b></td>`;
+            html += "</tr>";
+        }
+
+        html += "</tbody></table></div>";
         container.innerHTML = html;
     }
 
     function calculateAndRender() {
         const month = document.getElementById('month').value;
-        const days = getDaysInMonth(month);
+        const daysInMonth = getDaysInMonth(month);
 
-        const morningHours = +document.getElementById('morningHours').value;
-        const eveningHours = +document.getElementById('eveningHours').value;
-        const morningGuards = +document.getElementById('morningGuardsPerShift').value;
-        const eveningGuards = +document.getElementById('eveningGuardsPerShift').value;
-        const maxHours = +document.getElementById('maxHoursPerGuard').value;
+        const morningHours = parseFloat(document.getElementById('morningHours').value);
+        const eveningHours = parseFloat(document.getElementById('eveningHours').value);
+        const morningGuardsPerShift = parseInt(document.getElementById('morningGuardsPerShift').value);
+        const eveningGuardsPerShift = parseInt(document.getElementById('eveningGuardsPerShift').value);
+        const maxHoursPerGuard = parseFloat(document.getElementById('maxHoursPerGuard').value);
 
-        const result = document.getElementById('result');
+        const resultDiv = document.getElementById('result');
+        const morningSection = document.getElementById('morningSection');
+        const eveningSection = document.getElementById('eveningSection');
 
-        if (!morningHours || !eveningHours || !maxHours) {
-            result.innerHTML = "⚠️ الرجاء إدخال جميع القيم.";
+        morningSection.innerHTML = "";
+        eveningSection.innerHTML = "";
+
+        if (
+            isNaN(morningHours) || isNaN(eveningHours) ||
+            isNaN(morningGuardsPerShift) || isNaN(eveningGuardsPerShift) ||
+            isNaN(maxHoursPerGuard) || maxHoursPerGuard <= 0
+        ) {
+            resultDiv.innerHTML = "⚠️ الرجاء إدخال جميع القيم بشكل صحيح.";
             return;
         }
 
-        const morningData = buildShiftSchedule(days, morningGuards, maxHours, morningHours, "D");
-        const eveningData = buildShiftSchedule(days, eveningGuards, maxHours, eveningHours, "N");
+        const totalMorningHours = daysInMonth * morningHours * morningGuardsPerShift;
+        const totalEveningHours = daysInMonth * eveningHours * eveningGuardsPerShift;
+        const totalRequiredHours = totalMorningHours + totalEveningHours;
 
-        renderShiftTable("الفترة الصباحية (D)", days, morningData, "morningSection");
-        renderShiftTable("الفترة المسائية (N)", days, eveningData, "eveningSection");
+        resultDiv.innerHTML =
+            `📅 عدد أيام الشهر: <b>${daysInMonth}</b><br>
+             🧮 إجمالي الساعات المطلوبة (صباح + مساء): <b>${totalRequiredHours}</b> ساعة<br>
+             🎯 الحد الأقصى المسموح لكل حارس في الشهر: <b>${maxHoursPerGuard}</b> ساعة`;
 
-        result.innerHTML =
-            `عدد أيام الشهر: <b>${days}</b><br>الحد الأقصى لكل حارس: <b>${maxHours}</b>`;
+        const morningData = buildShiftSchedule(
+            daysInMonth,
+            morningGuardsPerShift,
+            maxHoursPerGuard,
+            morningHours,
+            "D"
+        );
+        renderShiftTable("جدول توزيع الحراس - الفترة الصباحية (D)", daysInMonth, "D", morningData, "morningSection");
+
+        const eveningData = buildShiftSchedule(
+            daysInMonth,
+            eveningGuardsPerShift,
+            maxHoursPerGuard,
+            eveningHours,
+            "N"
+        );
+        renderShiftTable("جدول توزيع الحراس - الفترة المسائية (N)", daysInMonth, "N", eveningData, "eveningSection");
     }
-
 </script>
 
 </body>
