@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>توزيع الحراس - MSF</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+            margin: 0;
+            background: #f4f6f8;
+            color: #333;
+        }
+
+        .top-bar {
+            background: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .top-bar img {
+            height: 40px;
+        }
+
+        .top-bar-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #c8102e;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 40px 20px 30px;
+        }
+
+        .hero h1 {
+            margin-bottom: 10px;
+            font-size: 26px;
+            color: #222;
+        }
+
+        .hero p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .hero-instructions {
+            max-width: 600px;
+            margin: 15px auto 25px;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 15px 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            text-align: right;
+        }
+
+        .hero-instructions ul {
+            padding-right: 20px;
+            margin: 0;
+        }
+
+        .hero-instructions li {
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .hero button {
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            background: #c8102e;
+            color: #fff;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto 40px;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 20px 25px 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button.calc-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 20px;
+            border: none;
+            background: #007b83;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: #f9fafb;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            overflow-x: auto;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 4px 6px;
+            text-align: center;
+        }
+
+        th {
+            background: #f1f1f1;
+        }
+
+        .guard-name {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .section-title {
+            margin-top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="top-bar">
+    <img src="MFS.png" alt="MSF Logo">
+    <div class="top-bar-title">نظام توزيع الحراس - MSF</div>
+</div>
+
+<div class="hero">
+    <h1>أداة توزيع الحراس على الفترات الصباحية والمسائية</h1>
+    <p>هذه الأداة تساعدك على توزيع الحراس مع احترام الحد الأقصى لساعات العمل.</p>
+
+    <div class="hero-instructions">
+        <strong>تعليمات:</strong>
+        <ul>
+            <li>أدخل ساعات كل فترة.</li>
+            <li>أدخل عدد الحراس المطلوب لكل فترة.</li>
+            <li>أدخل الحد الأقصى لساعات كل حارس.</li>
+        </ul>
+    </div>
+
+    <button id="startBtn">قم بتوزيع الحراس</button>
+</div>
+
+<div id="calculatorContainer" style="display:none;">
+    <div class="container">
+        <h2>إعدادات التوزيع</h2>
+
+        <label>الشهر:</label>
+        <select id="month">
+            <option value="1">يناير (31)</option>
+            <option value="2">فبراير (28)</option>
+            <option value="3">مارس (31)</option>
+            <option value="4">أبريل (30)</option>
+            <option value="5">مايو (31)</option>
+            <option value="6">يونيو (30)</option>
+            <option value="7">يوليو (31)</option>
+            <option value="8">أغسطس (31)</option>
+            <option value="9">سبتمبر (30)</option>
+            <option value="10">أكتوبر (31)</option>
+            <option value="11">نوفمبر (30)</option>
+            <option value="12">ديسمبر (31)</option>
+        </select>
+
+        <label>ساعات الفترة الصباحية:</label>
+        <input type="number" id="morningHours">
+
+        <label>ساعات الفترة المسائية:</label>
+        <input type="number" id="eveningHours">
+
+        <label>عدد الحراس في الفترة الصباحية:</label>
+        <input type="number" id="morningGuardsPerShift">
+
+        <label>عدد الحراس في الفترة المسائية:</label>
+        <input type="number" id="eveningGuardsPerShift">
+
+        <label>الحد الأقصى لساعات دوام الحارس:</label>
+        <input type="number" id="maxHoursPerGuard">
+
+        <button class="calc-btn" onclick="calculateAndRender()">احسب ووزع</button>
+
+        <div id="result"></div>
+        <div id="morningSection"></div>
+        <div id="eveningSection"></div>
+    </div>
+</div>
+
+<script>
+
+    /* ===== إصلاح مشكلة scrollIntoView على الجوال ===== */
+    document.getElementById('startBtn').addEventListener('click', function () {
+        const calc = document.getElementById('calculatorContainer');
+        calc.style.display = 'block';
+
+        if (typeof calc.scrollIntoView === "function") {
+            try {
+                calc.scrollIntoView({ behavior: "smooth" });
+            } catch (e) {
+                calc.scrollIntoView();
+            }
+        }
+    });
+
+    function getDaysInMonth(month) {
+        const m = parseInt(month);
+        return [1,3,5,7,8,10,12].includes(m) ? 31 :
+               [4,6,9,11].includes(m) ? 30 : 28;
+    }
+
+    function buildShiftSchedule(days, guardsPerShift, maxHours, shiftHours, code) {
+        if (guardsPerShift <= 0 || shiftHours <= 0) {
+            return { totalGuards: 0, totalRequiredHours: 0, schedule: [], guardHours: [] };
+        }
+
+        const totalRequiredHours = days * guardsPerShift * shiftHours;
+        let totalGuards = 1;
+        let iterations = 0;
+
+        while (iterations < 200) {
+            let schedule = Array.from({ length: totalGuards }, () =>
+                Array.from({ length: days }, () => "R")
+            );
+
+            let idx = 0;
+            for (let d = 0; d < days; d++) {
+                for (let s = 0; s < guardsPerShift; s++) {
+                    schedule[idx % totalGuards][d] = code;
+                    idx++;
+                }
+            }
+
+            let guardHours = schedule.map(row =>
+                row.filter(v => v === code).length * shiftHours
+            );
+
+            if (Math.max(...guardHours) <= maxHours) {
+                return { totalGuards, totalRequiredHours, schedule, guardHours };
+            }
+
+            totalGuards++;
+            iterations++;
+        }
+
+        return { totalGuards, totalRequiredHours, schedule: [], guardHours: [] };
+    }
+
+    function renderShiftTable(title, days, data, containerId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = "";
+
+        if (data.totalGuards === 0) {
+            container.innerHTML = `<p>${title}: لا يوجد حراس</p>`;
+            return;
+        }
+
+        let html = `<h3>${title}</h3>`;
+        html += `<p>عدد الحراس: <b>${data.totalGuards}</b> — الساعات المطلوبة: <b>${data.totalRequiredHours}</b></p>`;
+        html += `<table><thead><tr><th>الحارس</th>`;
+
+        for (let d = 1; d <= days; d++) html += `<th>${d}</th>`;
+        html += `<th>المجموع</th></tr></thead><tbody>`;
+
+        data.schedule.forEach((row, i) => {
+            html += `<tr><td class="guard-name">حارس ${i+1}</td>`;
+            row.forEach(day => html += `<td>${day}</td>`);
+            html += `<td><b>${data.guardHours[i]}</b></td></tr>`;
+        });
+
+        html += `</tbody></table>`;
+        container.innerHTML = html;
+    }
+
+    function calculateAndRender() {
+        const month = document.getElementById('month').value;
+        const days = getDaysInMonth(month);
+
+        const morningHours = +document.getElementById('morningHours').value;
+        const eveningHours = +document.getElementById('eveningHours').value;
+        const morningGuards = +document.getElementById('morningGuardsPerShift').value;
+        const eveningGuards = +document.getElementById('eveningGuardsPerShift').value;
+        const maxHours = +document.getElementById('maxHoursPerGuard').value;
+
+        const result = document.getElementById('result');
+
+        if (!morningHours || !eveningHours || !maxHours) {
+            result.innerHTML = "⚠️ الرجاء إدخال جميع القيم.";
+            return;
+        }
+
+        const morningData = buildShiftSchedule(days, morningGuards, maxHours, morningHours, "D");
+        const eveningData = buildShiftSchedule(days, eveningGuards, maxHours, eveningHours, "N");
+
+        renderShiftTable("الفترة الصباحية (D)", days, morningData, "morningSection");
+        renderShiftTable("الفترة المسائية (N)", days, eveningData, "eveningSection");
+
+        result.innerHTML =
+            `عدد أيام الشهر: <b>${days}</b><br>الحد الأقصى لكل حارس: <b>${maxHours}</b>`;
+    }
+
+</script>
+
+</body>
+</html>
